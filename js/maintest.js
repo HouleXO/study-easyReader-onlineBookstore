@@ -14,17 +14,26 @@
         }
     })();
     
-    // Dom Object
+    // dom节点的缓存
     var Dom = {
         top_nav :$('#top-nav'),
         bottom_nav :$('.bottom_nav'),
         font_container : $('.font-container'),
         font_button: $('#font-button'),
-        night_button : $('#night-button')
+        night_button : $('#night-button'),
+        bk_container : $('#bk-container'),
+        bottom_tool_bar : $('#bottom_tool_bar'),
+        nav_title : $('#nav_title'),
+        next_button : $('#next_button'),
+        prev_button : $('#prev_button'),
+        back_button : $('#back_button'),
+        bk_ul : $('.bk-container')
         
     }
     var Win = $(window);
     var Doc = $(document);
+    var ScrollLock = false;
+    var Screen = Doc.body;
     var RootContainer = $('#fiction_container');
     
     // 初始化字体大小
@@ -45,6 +54,65 @@
     //是否是夜间模式
     var NightMode = false;
     
+    // 获取各类颜色值
+    var tool_bar = Util.StorageGetter('toolbar_background_color');
+    var bottomcolor = Util.StorageGetter('bottom_color'); 
+    var color = Util.StorageGetter('background_color');
+    var font = Util.StorageGetter('font_color');
+
+    console.log("@@@@@@@@@@@@@@@@@@" + font); 
+    console.log("$$$$$$$$$$$$$$$$$$" + color);
+    console.log("##################" + bottomcolor);
+
+    RootContainer.css('min-height', $(window).height() - 100);
+    if (bottomcolor) {
+        $('#bottom_tool_bar_ul').find('li').css('color', bottomcolor);
+    }
+    if (color) {
+        $('body').css('background-color', color);
+    }
+    if (font) {
+        $('.m-read-content').css('color', font);
+    }
+    //夜间模式
+    if (fontColor == '#4e534f') {
+        NightMode = true;
+        $('#day_icon').show();
+        $('#night_icon').hide();
+        $('#bottom_tool_bar_ul').css('opacity', '0.6');
+    }
+    //字体设置信息
+    InitFontSize = Util.StorageGetter('font_size');
+    InitFontSize = parseInt(InitFontSize);
+    if (!InitFontSize) {
+        InitFontSize = 18;
+    }
+    RootContainer.css('font-size', InitFontSize);
+    // 可设置背景颜色选项
+    var colorArr = [{
+        value : '#e9dfc7',
+        name : 'default',
+        font : ''
+    }, {
+        value : '#F0FFF0',
+        name : 'seaGreen',
+        font : '',
+        id : "font_normal"
+    }, {
+        value : '#FFFFE0',
+        name : 'lightYellow',
+        font : ''
+    }, {
+        value : '#008000',
+        name : 'green',
+        font : ''
+    }, {
+        value : '#E1FFFF',
+        name : 'lightCyan',
+        font : '#7685a2',
+        bottomcolor : '#fff'
+    }];
+        
     // TODO 整个项目的入口函数
     function main(){
         EventHandler();
@@ -63,8 +131,7 @@
     
     // 交互的事件绑定
     function EventHandler(){
-        
-        
+            
         // 屏幕唤出上下边栏交互
         $('#action_mid').click(function(){
             if(Dom.top_nav.css('display') == 'none'){
@@ -94,11 +161,6 @@
             }
         });
         
-        // 触发背景切换的事件
-        $('#night_button').click(function(){
-            
-        });
-        
         // 字体大小设置
         $('#large-font').click(function(){
             if(initFontSize > 20){
@@ -115,37 +177,70 @@
             RootContainer.css('font-size',initFontSize);
             Util.StorageSetter('font_size',initFontSize);
         });
-        
-        // 字体面板的背景切换
-        
+
         // 字体面板中的黑白天阅读模式切换
-        // 触发背景切换事件
+
+         //夜间和白天模式的转化
         Dom.night_button.click(function() {
             if (NightMode) {
                 $('#day_icon').hide();
                 $('#night_icon').show();
                 $('#font_normal').trigger('click');
+                $('.m-read-content').css('background', '#e9dfc7');
                 NightMode = false;
             } else {
                 $('#day_icon').show();
                 $('#night_icon').hide();
                 $('#font_night').trigger('click');
+                $('.m-read-content').css('background', '#0f1410');
+                $('.m-read-content').css('color', '#4e534f');
                 NightMode = true;
             }
         });
         
-        if (fontColor == '#4e534f') {
-            NightMode = true;
-            $('#day_icon').show();
-            $('#night_icon').hide();
-            $('#bottom_tool_bar_ul').css('opacity', '0.6');
-        } else {
-            NightMode = false;
-            $('#day_icon').hide();
-            $('#night_icon').show();
-            $('#bottom_tool_bar_ul').css('opacity', '0.9');
-        }
-         
+        // 背景颜色div
+        $('ul li').click(function(){
+            var curBKIndex = $('.child-mod ul li').index(this);
+            for (var i=0; i<colorArr.length; i++) {
+                if(curBKIndex > 0){
+                    $('.m-read-content').css('background', colorArr[curBKIndex].value);
+                }
+            } 
+        });
+
+        //字体和背景颜色的信息设置
+        Dom.bk_container.delegate('.bk-container', 'click', function() {
+            
+            var color = $(this).data('color');
+            var font = $(this).data('font');
+            var bottomcolor = $(this).data('bottomcolor');
+            // var bkListsNum = $('#bk-container').find('li');
+            var tool_bar = font;
+            var tool_bar = Util.StorageGetter('font_color');
+            console.log("*****" + bottomcolor);
+            if (!font) {
+                font = '#000';
+            }
+            if (!tool_bar) {
+                tool_bar = '#fbfcfc';
+            }
+
+            if (bottomcolor && bottomcolor != "undefined") {
+                $('#bottom_tool_bar_ul').find('li').css('color', bottomcolor);
+            } else {
+                $('#bottom_tool_bar_ul').find('li').css('color', '#a9a9a9');
+            }
+            $('body').css('background-color', color);
+            $('.m-read-content').css('color', font);
+
+            Util.StorageSetter('toolbar_background_color', tool_bar);
+            Util.StorageSetter('bottom_color', bottomcolor);
+            Util.StorageSetter('background_color', color);
+            Util.StorageSetter('font_color', font);
+            
+            var fontColor = Util.StorageGetter('font_color');
+        });
+
         // 屏幕滚动事件
         Win.scroll(function(){
             Dom.bottom_nav.hide();

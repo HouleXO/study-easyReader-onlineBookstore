@@ -15,7 +15,7 @@
         
         <!-- 阅读区 -->
         <div class="container" id="root">
-        
+
             <!-- 仿native上边栏 -->
             <div class="top-nav" id="top-nav" style="display:none">  <!-- style="display:none" -->
                 <div class="top-nav-warp">
@@ -47,12 +47,12 @@
             </div>
             
             <!-- 章节切换 -->
-            <div class="m-button-bar" id="bottom_tool_bar" >  <!-- style="display:none;padding-bottom:70px;" -->
+            <div class="m-button-bar" id="bottom_tool_bar" style="display:none;padding-bottom:70px;">  <!-- style="display:none;padding-bottom:70px;" -->
                 <ul class="u-tab" id="bottom_tool_bar_ul">
                     <li id="prev_button" >
                         上一章
                     </li>
-                    <li id="next_button" >
+                    <li id="next_button" style="border-right:none"> <!-- style="border-right:none" -->
                         下一章
                     </li>
                 </ul>
@@ -63,23 +63,33 @@
             <div class="nav-pannel font-container" id="font-container" style="display:none">  <!-- style="display:none" -->
                 <div class="child-mod">
                     <span>字号</span>
-                    <button id="large-font" class="font-size-button">
+                    <button id="large-font" class="spe-button">
                         大
                     </button>
-                    <button id="small-font" class="font-size-button">
+                    <button id="small-font" class="spe-button" style="margin-left:10px">
                         小
                     </button>
                 </div>
                 <div class="child-mod" id="bk-container">
                     <span>背景</span>
-                    <div class="bk-container">
-                        <div class="bk-container-default"></div>
-                        <div class="bk-container-seaGreen"></div>
-                        <div class="bk-container-lightYellow"></div>
-                        <div class="bk-container-green"></div>
-                        <div class="bk-container-lightCyan"></div>
-                    </div>
+                    <ul class="bk-container">
+                        <li class="default"></li>
+                        <li class="seaGreen"></li>
+                        <li class="lightYellow"></li>
+                        <li class="green"></li>
+                        <li class="lightCyan"></li>
+                    </ul>
                 </div>
+            </div>
+            <div class="m-button-bar" id="bottom_tool_bar" style="display:none;padding-bottom:70px;">
+                <ul class="u-tab" id="bottom_tool_bar_ul">
+                    <li id="prev_button" >
+                        上一章
+                    </li>
+                    <li id="next_button" style="border-right:none">
+                        下一章
+                    </li>
+                </ul>
             </div>
             
             <!-- 仿native底边栏 -->
@@ -121,6 +131,10 @@
                 正在加载中...
             </div>
 
+            <div class="m-tool-bar-mask" id="tool_bar_mask" style="display:none"></div>
+            <ul class="menu-container chapter-list" id="menu_container" style="display:none"></ul>
+            <div class="menu-mask" id="menu_mask" style="display:none"></div>
+            <div class="mask" id="mask" style="display:none"></div>
         </div>
           
         <script src="lib/zepto.min.js"></script>
