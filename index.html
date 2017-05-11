@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html ng-app="app">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+        <meta name="format-detection" content="telephone=no">
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <!-- 加载状态 -->
+        <div class="loading-mask" id="init_loading">
+            <div class="loading-icon"></div>
+        </div>
+        
+        <!-- 阅读区 -->
+        <div class="container" id="root">
+        
+            <!-- 仿native上边栏 -->
+            <div class="top-nav" id="top-nav" style="display:none">  <!-- style="display:none" -->
+                <div class="top-nav-warp">
+                    <div class="icon-back"></div>
+                    <div class="nav-title" id="nav_title">
+                        返回书架
+                    </div>
+                </div>
+            </div>
+        
+            <!-- 小说章节标题 -->
+            <div id="fiction_chapter_title"></div>   
+
+            <!-- 内容touch操作区域 -->
+            <div class="m-artical-action">
+                <div class="artical-action-mid" id="action_mid"></div>
+            </div>   
+
+            <!-- 小说主体内容 -->
+            <div id="fiction_container" class="m-read-content">
+            
+                <!-- 测试文字内容 -->
+                <h4>匆匆</h4>
+                <p>燕子去了，有再来的时候；杨柳枯了，有再青的时候；桃花谢了，有再开的时 候。但是，聪明的，你告诉我，我们的日子为什么一去不复返呢？是有人偷了他 们罢：那是谁？又藏在何处呢？是他们自己逃走了罢——如今又到了哪里呢？</p>
+                <p>我不知道他们给了我多少日子，但我的手确乎是渐渐空虚了。在默默里算着，八千多日子已经从我手中溜去，像针尖上一滴水滴在大海里，我的日子滴在时间的流里，没有声音，也没有影子。我不禁头涔涔而泪潸潸了。</p>
+                <p>去的尽管去了，来的尽管来着；去来的中间，又怎样地匆匆呢？早上我起来的时候，小屋里射进两三方斜斜的太阳。太阳他有脚啊，轻轻悄悄地挪移了；我也茫茫然跟着旋转。于是洗手的时候，日子从水盆里过去；吃饭的时候，日子从饭碗里过去；默默时，便从凝然的双眼前过去。我觉察他去的匆匆了，伸出手遮挽时，他又从遮挽着的手边过去，天黑时，我躺在床上，他便伶伶俐俐地从我身上跨过，从我脚边飞去了。等我睁开眼和太阳再见，这算又溜走了一日。我掩着面叹息。但是新来的日子的影儿又开始在叹息里闪过了。</p>
+                <p>在逃去如飞的日子里，在千门万户的世界里的我能做些什么呢？只有徘徊罢了，只有匆匆罢了；在八千多日的匆匆里，除徘徊外，又剩些什么呢？过去的日子如轻烟，被微风吹散了，如薄雾，被初阳蒸融了；我留着些什么痕迹呢？我何曾留着像游丝样的痕迹呢？我赤裸裸来到这世界，转眼间也将赤裸裸的回去罢？但不能平的，为什么偏要白白走这一遭啊？</p>
+                <p>你聪明的，告诉我，我们的日子为什么一去不复返呢</p>
+            </div>
+            
+            <!-- 章节切换 -->
+            <div class="m-button-bar" id="bottom_tool_bar" >  <!-- style="display:none;padding-bottom:70px;" -->
+                <ul class="u-tab" id="bottom_tool_bar_ul">
+                    <li id="prev_button" >
+                        上一章
+                    </li>
+                    <li id="next_button" >
+                        下一章
+                    </li>
+                </ul>
+            </div>            
+            
+            <!-- 设置操作面板 -->
+            <div class="nav-pannel-bk font-container" id="font-container" style="display:none"></div> <!-- style="display:none" -->
+            <div class="nav-pannel font-container" id="font-container" style="display:none">  <!-- style="display:none" -->
+                <div class="child-mod">
+                    <span>字号</span>
+                    <button id="large-font" class="font-size-button">
+                        大
+                    </button>
+                    <button id="small-font" class="font-size-button">
+                        小
+                    </button>
+                </div>
+                <div class="child-mod" id="bk-container">
+                    <span>背景</span>
+                    <div class="bk-container">
+                        <div class="bk-container-default"></div>
+                        <div class="bk-container-seaGreen"></div>
+                        <div class="bk-container-lightYellow"></div>
+                        <div class="bk-container-green"></div>
+                        <div class="bk-container-lightCyan"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 仿native底边栏 -->
+            <div class="bottom-nav-bk bottom_nav" style="display:none"></div>
+            <div class="bottom-nav bottom_nav" style="display:none">  <!-- style="display:none" -->
+                <div class="item menu-button" id="menu_button">
+                    <div class="item-warp">
+                        <div class="icon-menu"></div>
+                        <div class="icon-text">
+                            目录
+                        </div>
+                    </div>
+                </div>
+                <div class="item" id="font-button">
+                    <div class="item-warp">
+                        <div class="icon-ft"></div>
+                        <div class="icon-text">
+                            字体
+                        </div>
+                    </div>
+                </div>
+                <div class="item" id="night-button">
+                    <div class="item-warp" id="day_icon" >
+                        <div class="icon-day"></div>
+                        <div class="icon-text">
+                            白天
+                        </div>
+                    </div>
+                    <div class="item-warp" id="night_icon" style="display:none">  <!-- style="display:none" -->
+                        <div class="icon-night"></div>
+                        <div class="icon-text">
+                            夜间
+                        </div>
+                    </div>
+                </div>
+            </div> 
+
+            <div class="loading" id="loading" style="display:none">
+                正在加载中...
+            </div>
+
+        </div>
+          
+        <script src="lib/zepto.min.js"></script>
+        <script>
+            window.jQuery = $;
+        </script>
+            <script src="js/jquery.base64.js"></script>
+            <script src="js/jquery.jsonp.js"></script>
+            <script src="js/maintest.js"></script>
+    </body>
+</html>
