@@ -8,7 +8,20 @@
         var StorageSetter = function(key, val) {
             return localStorage.setItem(prefix + key, val);
         }
+        var getBSONP = function(url, callback){
+            return $.jsonp({
+                url : url,
+                cache : true,
+                callback : 'duokan_fiction_chapter',
+                success : function(result){
+                    var data = $.base64.decode(result);
+                    var json = decodeURIComponent(escape(data));
+                    callback(data);
+                }
+            })
+        }
         return {
+            getBSONP : getBSONP,
             StorageGetter : StorageGetter,
             StorageSetter : StorageSetter
         }
@@ -23,11 +36,12 @@
         night_button : $('#night-button'),
         bk_container : $('#bk-container'),
         bottom_tool_bar : $('#bottom_tool_bar'),
+        bk_ul : $('.bk-container'),
+        // 章节信息
         nav_title : $('#nav_title'),
         next_button : $('#next_button'),
         prev_button : $('#prev_button'),
-        back_button : $('#back_button'),
-        bk_ul : $('.bk-container')
+        back_button : $('#back_button')
         
     }
     var Win = $(window);
@@ -59,10 +73,6 @@
     var bottomcolor = Util.StorageGetter('bottom_color'); 
     var color = Util.StorageGetter('background_color');
     var font = Util.StorageGetter('font_color');
-
-    console.log("@@@@@@@@@@@@@@@@@@" + font); 
-    console.log("$$$$$$$$$$$$$$$$$$" + color);
-    console.log("##################" + bottomcolor);
 
     RootContainer.css('min-height', $(window).height() - 100);
     if (bottomcolor) {
@@ -115,12 +125,45 @@
         
     // TODO 整个项目的入口函数
     function main(){
+        var readerModel = ReaderModel();
+        readerModel.init();
         EventHandler();
     }
     
     // TODO 实现和阅读器相关的数据交互的方法
     // AJAX, JSONP
     function ReaderModel(){
+        // 获得章节列表
+        var Chapter_id;
+        var init = function(){
+            getFictionInfo(function(){
+                getCurChapterContent(Chapter_id, function(){
+                    // TODO .....
+                });
+            });
+        }
+        var getFictionInfo = function(callback){
+            $.get('data/chapter.json', function(data){
+                // TODO 获得章节信息后的回调
+                Chapter_id = data.chapters[1].chapter_id;
+                callback && callback();
+            }, 'json');
+        }
+        var getCurChapterContent = function(chapter_id, data){
+            $.get('data/data' + chapter_id + '.json', function(data){
+                // TODO 获得段落信息后的回调
+                // 检查服务器状态
+                if(data.result == 0){
+                    var url = data.jsonp;
+                    Util.getBSONP(url, function(data){
+                        callback && callback(data);
+                    });
+                }
+            }, 'json');
+        }
+        return {
+            init : init
+        }
         
     }
     
@@ -186,14 +229,15 @@
                 $('#day_icon').hide();
                 $('#night_icon').show();
                 $('#font_normal').trigger('click');
-                $('.m-read-content').css('background', '#e9dfc7');
+                
+                $('.m-read-content').css('background', '#0f1410');
+                $('.m-read-content').css('color', '#4e534f');
                 NightMode = false;
             } else {
                 $('#day_icon').show();
                 $('#night_icon').hide();
                 $('#font_night').trigger('click');
-                $('.m-read-content').css('background', '#0f1410');
-                $('.m-read-content').css('color', '#4e534f');
+                $('.m-read-content').css('background', '#e9dfc7');
                 NightMode = true;
             }
         });
