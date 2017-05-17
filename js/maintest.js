@@ -16,7 +16,7 @@
                 success : function(result){
                     var data = $.base64.decode(result);
                     var json = decodeURIComponent(escape(data));
-                    callback(data);
+                    callback(json);
                 }
             })
         }
@@ -49,6 +49,7 @@
     var ScrollLock = false;
     var Screen = Doc.body;
     var RootContainer = $('#fiction_container');
+    var readerMode, readerUI;
     
     // 初始化字体大小
     var initFontSize = Util.StorageGetter('font_size') ;
@@ -122,23 +123,18 @@
         font : '#7685a2',
         bottomcolor : '#fff'
     }];
-        
-    // TODO 整个项目的入口函数
-    function main(){
-        var readerModel = ReaderModel();
-        readerModel.init();
-        EventHandler();
-    }
-    
+           
     // TODO 实现和阅读器相关的数据交互的方法
     // AJAX, JSONP
     function ReaderModel(){
         // 获得章节列表
         var Chapter_id;
-        var init = function(){
+        var ChapterTotal;
+        var init = function(UIcallback){
             getFictionInfo(function(){
-                getCurChapterContent(Chapter_id, function(){
+                getCurChapterContent(Chapter_id, function(data){
                     // TODO .....
+                    UIcallback && UIcallback(data);
                 });
             });
         }
@@ -146,10 +142,11 @@
             $.get('data/chapter.json', function(data){
                 // TODO 获得章节信息后的回调
                 Chapter_id = data.chapters[1].chapter_id;
+                ChapterTotal = data.chapters.length;
                 callback && callback();
             }, 'json');
         }
-        var getCurChapterContent = function(chapter_id, data){
+        var getCurChapterContent = function(chapter_id, callback){
             $.get('data/data' + chapter_id + '.json', function(data){
                 // TODO 获得段落信息后的回调
                 // 检查服务器状态
@@ -161,15 +158,45 @@
                 }
             }, 'json');
         }
+        var preChapter = function(UIcallback){
+            // 获得上一章节内容
+            Chapter_id = parseInt(Chapter_id, 10);
+            if(Chapter_id == 0){
+                return;
+            }
+            Chapter_id -= 1;
+            getCurChapterContent(Chapter_id, UIcallback);
+        }
+        var nextChapter = function(chapter_id){
+            // 获得下一章节内容
+            Chapter_id = parseInt(Chapter_id, 10);
+            if(Chapter_id == ChapterTotal){
+                return;
+            }
+            Chapter_id += 1;
+            getCurChapterContent(Chapter_id, UIcallback);
+        }
         return {
-            init : init
+            init : init,
+            preChapter : preChapter,
+            nextChapter : nextChapter
         }
         
     }
     
-    // 渲染基本的UI结构
-    function ReaderBaseFrame(){
-        
+    function ReaderBaseFrame(container){
+        // 渲染基本的UI结构
+        function parseChapterData(jsonData){
+            var jsonObj = JSON.parse(jsonData);
+            var html = '<h4>' + jsonObj.t + '</h4>';
+            for(var i=0; i<jsonObj.p.length; i++){
+                html += "<p>" + jsonObj.p[i] + "</p>"
+            }
+            return html;
+        }
+        return function(data){
+            container.html(parseChapterData(data));
+        }
     }
     
     // 交互的事件绑定
@@ -293,6 +320,29 @@
             Dom.font_button.removeClass('current');
             Util.StorageSetter('font_size',initFontSize);
         });
+        
+        Dom.prev_button.click(function(){
+            // TODO 获得章节的翻页数据->把数据拿出来渲染
+            readerMode.prevChapter(function(data){
+                readerUI(data);
+            });
+        });
+        
+        Dom.next_button.click(function(){
+            readerMode.nextChapter(function(data){
+                readerUI(data);
+            });
+        });
+    }
+    
+    // TODO 整个项目的入口函数
+    function main(){
+        readerModel = ReaderModel();
+        readerUI = ReaderBaseFrame(RootContainer);
+        readerModel.init(function(data){
+            readerUI(data);
+        });
+        EventHandler();
     }
     
     main();    
