@@ -58,3 +58,154 @@ body { text-align: left; width: 100%; -webkit-tap-highlight-color: rgba(0,0,0,.0
 
 .large-font p { font-size: 18px; }
 .small-font p { font-size: 14px; } 
+
+/*加载样式*/
+.loading {
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    top: 40%;
+    color: #fff;
+    z-index: 199999
+}
+
+.loading-icon {
+    margin: 0 auto;
+    margin-top: 50%;
+    background: url(data:image/gif;base64,R0lGODlhGAAYAIAAAK2trTE6QiH/C05FVFNDQVBFMi4wAwEAAAAh+QQFDwABACwDAAkAEgAGAAACFIQReah7GRZ0r5lJWayb4ms5n7YUACH5BAkPAAEALAIABwATAAoAAAIbhB+pq4cMwwMR0lbZTTvL1WVdWI1e45BRqkIFACH5BAkPAAEALAMABwASAAoAAAIdjA+px63r4EtmylktyI/jYHkd+GkbOY5M2LQsUwAAIfkECQ8AAQAsAwAIABMACAAAAhqMjwfLrWyaBG/FCa8NOPPcbd8WUpo5Jeq5FAA7);
+    width: 20px;
+    height: 20px;
+}
+.loading-mask {
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.1;
+    position: fixed;
+    top: 0px;
+}
+
+m-tool-button-mask{
+    text-align: center;
+    width: 100%;
+    height: 40px;
+    position: fixed;
+    bottom: 0px;
+    z-index: 9999;
+    background: #000;
+    opacity: .9;
+}
+
+.menu-mask{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 9999;
+    background: #000;
+    opacity: .8;
+    top: 0px;
+}
+
+.menu-container{
+    height: 60px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    overflow: scroll;
+    background: #fff;
+    display: block;
+    z-index: 9999;
+}
+
+.chapter-list {
+    text-align: left;
+}
+.chapter-list li {
+    padding: 15px;
+}
+.chapter-list li:nth-child(2n-1) {
+    background-color: #ededed
+}
+.chapter-list li:nth-child(2n) {
+    background-color: #e6e6e6
+}
+.chapter-list .free {
+    float: right;
+}
+.free {
+    color: #459c3a;
+}
+
+.mask {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 12000;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: .4;
+    background: #000;
+}
+
+.buy-mask {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    text-align: center;
+    margin: 0 auto;
+    display: none;
+    z-index: 10001;
+    background: #e9dfc7;
+}
+
+.buy-container {
+    width: 100%;
+    position: fixed;
+    top: 20%;
+    text-align: center;
+    margin: 0 auto;
+    display: none;
+    z-index: 10003;
+}
+.buy-container h3 {
+    font-weight: normal;
+    line-height: 30px;
+    font-family: microsoft yahei, arial, helvetica, sans-serif;
+}
+.buy-container h2 {
+    padding-bottom: 80px;
+}
+
+.buy-container button {
+    font-family: microsoft yahei, arial, helvetica, sans-serif;
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+    border: none;
+    color: #fff;
+    padding: 0 10px;
+    width: 160px;
+    background: #4a90b1;
+    margin-top: 10px;
+}
+
+.m-read-content {
+    min-height: 300px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.buy-popup-frame {
+    display: none;
+    position: fixed;
+    bottom: 0px;;
+    left: 0px;
+    width: 100%;
+    height: 266px;
+    z-index: 39999;
+}
