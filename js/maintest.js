@@ -40,10 +40,8 @@
     };
     var Win = $(window);
     var Doc = $(document);
-    var ScrollLock = false;
-    var Screen = Doc.body;
     var RootContainer = $('#fiction_container');
-    var readerMode, readerUI;
+
     
     // 初始化字体大小
     var initFontSize = Util.StorageGetter('font_size') ;
@@ -70,8 +68,8 @@
 
     // 初始化元素颜色值
     RootContainer.css('min-height', $(window).height() - 100);
-    if (bottomcolor) {
-        $('#bottom_tool_bar_ul').find('li').css('color', bottomcolor);
+    if (bottom_color) {
+        $('#bottom_tool_bar_ul').find('li').css('color', bottom_color);
     }
     if (color) {
         $('body').css('background-color', color);
@@ -110,7 +108,7 @@
         value : '#E1FFFF',
         name : 'lightCyan',
         font : '#7685a2',
-        bottomcolor : '#fff'
+        bottom_color : '#fff'
     }];
 
     // 交互的事件绑定
@@ -118,7 +116,7 @@
             
         // 屏幕唤出上下边栏交互
         $('#action_mid').click(function(){
-            if(Dom.top_nav.css('display') == 'none'){
+            if(Dom.top_nav.css('display') === 'none'){
                 Dom.bottom_nav.show();
                 Dom.top_nav.show();
             }else{
@@ -131,7 +129,7 @@
         
         // 唤出字体面板交互
         Dom.font_button.click(function(){
-            if(Dom.font_container.css('display') == 'none'){
+            if(Dom.font_container.css('display') === 'none'){
                 Dom.font_container.show();
                 Dom.font_button.addClass('current');
             }else{
@@ -194,24 +192,19 @@
             var font = $(this).data('font');
             var bottom_color = $(this).data('bottom_color');
 
-            console.log("*****" + bottom_color);
             if (!font) {
                 font = '#000';
             }
-            if (!tool_bar) {
-                tool_bar = '#fbfcfc';
-            }
 
-            if (bottomcolor && bottomcolor !== "undefined") {
-                $('#bottom_tool_bar_ul').find('li').css('color', bottomcolor);
+            if (bottom_color && bottom_color !== "undefined") {
+                $('#bottom_tool_bar_ul').find('li').css('color', bottom_color);
             } else {
                 $('#bottom_tool_bar_ul').find('li').css('color', '#a9a9a9');
             }
             $('body').css('background-color', color);
             $('.m-read-content').css('color', font);
 
-            Util.StorageSetter('toolbar_background_color', tool_bar);
-            Util.StorageSetter('bottom_color', bottomcolor);
+            Util.StorageSetter('bottom_color', bottom_color);
             Util.StorageSetter('background_color', color);
             Util.StorageSetter('font_color', font);
             
