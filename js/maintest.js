@@ -4,10 +4,10 @@
         var prefix = 'html5_reader_';  // prefix 前缀
         var StorageGetter = function(key) {
             return localStorage.getItem(prefix + key);
-        }
+        };
         var StorageSetter = function(key, val) {
             return localStorage.setItem(prefix + key, val);
-        }
+        };
         var getBSONP = function(url, callback){
             return $.jsonp({
                 url : url,
@@ -19,7 +19,7 @@
                     callback(json);
                 }
             })
-        }
+        };
         return {
             getBSONP : getBSONP,
             StorageGetter : StorageGetter,
@@ -27,7 +27,7 @@
         }
     })();
     
-    // dom节点的缓存
+    // Dom节点的缓存
     var Dom = {
         top_nav :$('#top-nav'),
         bottom_nav :$('.bottom_nav'),
@@ -36,14 +36,8 @@
         night_button : $('#night-button'),
         bk_container : $('#bk-container'),
         bottom_tool_bar : $('#bottom_tool_bar'),
-        bk_ul : $('.bk-container'),
-        // 章节信息
-        nav_title : $('#nav_title'),
-        next_button : $('#next_button'),
-        prev_button : $('#prev_button'),
-        back_button : $('#back_button')
-        
-    }
+        bk_ul : $('.bk-container')
+    };
     var Win = $(window);
     var Doc = $(document);
     var ScrollLock = false;
@@ -62,7 +56,7 @@
     // 记忆已设置的文字颜色
     var fontColor = Util.StorageGetter('font_color');
     if(!fontColor){
-        fontColor == '#4e534f';
+        fontColor = '#4e534f';
     }
     RootContainer.css('font-color',fontColor);
         
@@ -70,11 +64,11 @@
     var NightMode = false;
     
     // 获取各类颜色值
-    var tool_bar = Util.StorageGetter('toolbar_background_color');
-    var bottomcolor = Util.StorageGetter('bottom_color'); 
+    var bottom_color = Util.StorageGetter('bottom_color');
     var color = Util.StorageGetter('background_color');
     var font = Util.StorageGetter('font_color');
 
+    // 初始化元素颜色值
     RootContainer.css('min-height', $(window).height() - 100);
     if (bottomcolor) {
         $('#bottom_tool_bar_ul').find('li').css('color', bottomcolor);
@@ -85,25 +79,20 @@
     if (font) {
         $('.m-read-content').css('color', font);
     }
+
     //夜间模式
-    if (fontColor == '#4e534f') {
+    if (fontColor = '#4e534f') {
         NightMode = true;
         $('#day_icon').show();
         $('#night_icon').hide();
         $('#bottom_tool_bar_ul').css('opacity', '0.6');
     }
-    //字体设置信息
-    InitFontSize = Util.StorageGetter('font_size');
-    InitFontSize = parseInt(InitFontSize);
-    if (!InitFontSize) {
-        InitFontSize = 18;
-    }
-    RootContainer.css('font-size', InitFontSize);
+
     // 可设置背景颜色选项
     var colorArr = [{
-        value : '#e9dfc7',
-        name : 'default',
-        font : ''
+        value: '#e9dfc7',
+        name: 'default',
+        font: ''
     }, {
         value : '#F0FFF0',
         name : 'seaGreen',
@@ -123,82 +112,7 @@
         font : '#7685a2',
         bottomcolor : '#fff'
     }];
-           
-    // TODO 实现和阅读器相关的数据交互的方法
-    // AJAX, JSONP
-    function ReaderModel(){
-        // 获得章节列表
-        var Chapter_id;
-        var ChapterTotal;
-        var init = function(UIcallback){
-            getFictionInfo(function(){
-                getCurChapterContent(Chapter_id, function(data){
-                    // TODO .....
-                    UIcallback && UIcallback(data);
-                });
-            });
-        }
-        var getFictionInfo = function(callback){
-            $.get('data/chapter.json', function(data){
-                // TODO 获得章节信息后的回调
-                Chapter_id = data.chapters[1].chapter_id;
-                ChapterTotal = data.chapters.length;
-                callback && callback();
-            }, 'json');
-        }
-        var getCurChapterContent = function(chapter_id, callback){
-            $.get('data/data' + chapter_id + '.json', function(data){
-                // TODO 获得段落信息后的回调
-                // 检查服务器状态
-                if(data.result == 0){
-                    var url = data.jsonp;
-                    Util.getBSONP(url, function(data){
-                        callback && callback(data);
-                    });
-                }
-            }, 'json');
-        }
-        var preChapter = function(UIcallback){
-            // 获得上一章节内容
-            Chapter_id = parseInt(Chapter_id, 10);
-            if(Chapter_id == 0){
-                return;
-            }
-            Chapter_id -= 1;
-            getCurChapterContent(Chapter_id, UIcallback);
-        }
-        var nextChapter = function(chapter_id){
-            // 获得下一章节内容
-            Chapter_id = parseInt(Chapter_id, 10);
-            if(Chapter_id == ChapterTotal){
-                return;
-            }
-            Chapter_id += 1;
-            getCurChapterContent(Chapter_id, UIcallback);
-        }
-        return {
-            init : init,
-            preChapter : preChapter,
-            nextChapter : nextChapter
-        }
-        
-    }
-    
-    function ReaderBaseFrame(container){
-        // 渲染基本的UI结构
-        function parseChapterData(jsonData){
-            var jsonObj = JSON.parse(jsonData);
-            var html = '<h4>' + jsonObj.t + '</h4>';
-            for(var i=0; i<jsonObj.p.length; i++){
-                html += "<p>" + jsonObj.p[i] + "</p>"
-            }
-            return html;
-        }
-        return function(data){
-            container.html(parseChapterData(data));
-        }
-    }
-    
+
     // 交互的事件绑定
     function EventHandler(){
             
@@ -210,6 +124,8 @@
             }else{
                 Dom.bottom_nav.hide();
                 Dom.top_nav.hide();
+                Dom.font_container.hide();
+                Dom.font_button.removeClass('current');
             }
         });
         
@@ -221,13 +137,6 @@
             }else{
                 Dom.font_container.hide();
                 Dom.font_button.removeClass('current');
-            }
-        });
-        $('#action_mid').click(function(){
-            if(Dom.font_container.css('display') == 'none'){
-                return;
-            }else{
-                Dom.font_container.hide();
             }
         });
         
@@ -256,7 +165,6 @@
                 $('#day_icon').hide();
                 $('#night_icon').show();
                 $('#font_normal').trigger('click');
-                
                 $('.m-read-content').css('background', '#0f1410');
                 $('.m-read-content').css('color', '#4e534f');
                 NightMode = false;
@@ -284,11 +192,9 @@
             
             var color = $(this).data('color');
             var font = $(this).data('font');
-            var bottomcolor = $(this).data('bottomcolor');
-            // var bkListsNum = $('#bk-container').find('li');
-            var tool_bar = font;
-            var tool_bar = Util.StorageGetter('font_color');
-            console.log("*****" + bottomcolor);
+            var bottom_color = $(this).data('bottom_color');
+
+            console.log("*****" + bottom_color);
             if (!font) {
                 font = '#000';
             }
@@ -296,7 +202,7 @@
                 tool_bar = '#fbfcfc';
             }
 
-            if (bottomcolor && bottomcolor != "undefined") {
+            if (bottomcolor && bottomcolor !== "undefined") {
                 $('#bottom_tool_bar_ul').find('li').css('color', bottomcolor);
             } else {
                 $('#bottom_tool_bar_ul').find('li').css('color', '#a9a9a9');
@@ -320,28 +226,10 @@
             Dom.font_button.removeClass('current');
             Util.StorageSetter('font_size',initFontSize);
         });
-        
-        Dom.prev_button.click(function(){
-            // TODO 获得章节的翻页数据->把数据拿出来渲染
-            readerMode.prevChapter(function(data){
-                readerUI(data);
-            });
-        });
-        
-        Dom.next_button.click(function(){
-            readerMode.nextChapter(function(data){
-                readerUI(data);
-            });
-        });
     }
     
     // TODO 整个项目的入口函数
     function main(){
-        readerModel = ReaderModel();
-        readerUI = ReaderBaseFrame(RootContainer);
-        readerModel.init(function(data){
-            readerUI(data);
-        });
         EventHandler();
     }
     

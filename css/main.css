@@ -87,6 +87,7 @@ body { text-align: left; width: 100%; -webkit-tap-highlight-color: rgba(0,0,0,.0
     top: 0px;
 }
 
+/*
 m-tool-button-mask{
     text-align: center;
     width: 100%;
@@ -97,7 +98,7 @@ m-tool-button-mask{
     background: #000;
     opacity: .9;
 }
-
+*/
 .menu-mask{
     width: 100%;
     height: 100%;
@@ -105,7 +106,7 @@ m-tool-button-mask{
     z-index: 9999;
     background: #000;
     opacity: .8;
-    top: 0px;
+    top: 0;
 }
 
 .menu-container{
@@ -155,7 +156,7 @@ m-tool-button-mask{
     height: 100%;
     width: 100%;
     position: fixed;
-    top: 0px;
+    top: 0;
     text-align: center;
     margin: 0 auto;
     display: none;
@@ -203,8 +204,8 @@ m-tool-button-mask{
 .buy-popup-frame {
     display: none;
     position: fixed;
-    bottom: 0px;;
-    left: 0px;
+    bottom: 0;
+    left: 0;
     width: 100%;
     height: 266px;
     z-index: 39999;
