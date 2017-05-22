@@ -12,7 +12,8 @@
             return $.jsonp({
                 url : url,
                 cache : true,
-                callback : "duokan_fiction_chapter",
+                // callback : "duokan_fiction_chapter",
+                callback : "",
                 success : function(result) {
                     var data = $.base64.decode(result);
                     var json = decodeURIComponent(escape(data));
