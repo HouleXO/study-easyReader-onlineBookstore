@@ -1,3 +1,4 @@
+// 通过模块模式实现代码访问控制
 (function() {'use strict';
     var Util = (function() {
         var prefix = 'ficiton_reader_';
