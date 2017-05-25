@@ -10,5 +10,5 @@ from a easy reader webApp to online bookstore site
 -  [慕课网实战项目《WebAPP书城整站开发》笔记三：触屏唤出上下边栏交互开发和优化](http://blog.csdn.net/Lovejulyer/article/details/72593724)
 -  [慕课网实战项目《WebAPP书城整站开发》笔记四：唤出字体面板交互开发](http://blog.csdn.net/Lovejulyer/article/details/72593734)
 -  [慕课网实战项目《WebAPP书城整站开发》笔记五：字体大小设置交互开发](http://blog.csdn.net/Lovejulyer/article/details/72593790)
-
+-  [慕课网实战项目《WebAPP书城整站开发》笔记六：字体面板中“背景”切换的交互开发 ](http://blog.csdn.net/lovejulyer/article/details/72636226)
 ----
