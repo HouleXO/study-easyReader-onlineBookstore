@@ -1,6 +1,6 @@
 # study-easyReader-onlineBookstore
 from a easy reader webApp to online bookstore site
-## study notes
+## 简易阅读器WebApp
 
 ----
 
@@ -14,3 +14,7 @@ from a easy reader webApp to online bookstore site
 ----
 
 ## 书城整站开发
+
+----
+    待补充
+----
